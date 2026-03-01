@@ -21,50 +21,12 @@ const GlobalStyle = () => (
       --text-dim: rgba(255,255,255,0.45);
     }
 
-    * { cursor: none !important; }
-
     body {
       background: var(--dark);
       font-family: 'Space Mono', monospace;
       color: #fff;
       overflow-x: hidden;
       min-height: 100vh;
-    }
-
-    .cur-dot {
-      position: fixed; top:0; left:0; z-index:99999;
-      width: 10px; height: 10px;
-      background: #000;
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%,-50%);
-      transition: width .15s, height .15s, background .15s;
-      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.5), 0 0 8px rgba(0,212,255,0.6);
-    }
-    .cur-ring {
-      position: fixed; top:0; left:0; z-index:99998;
-      width: 36px; height: 36px;
-      border: 1.5px solid rgba(0,212,255,0.55);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%,-50%);
-      transition: width .35s cubic-bezier(0.25,0.46,0.45,0.94),
-                  height .35s cubic-bezier(0.25,0.46,0.45,0.94),
-                  border-color .3s, opacity .3s;
-    }
-    .cur-ring.hovering {
-      width: 60px; height: 60px;
-      border-color: rgba(255,45,155,0.8);
-      background: rgba(255,45,155,0.05);
-    }
-    .cur-glow {
-      position: fixed; top:0; left:0; z-index:99997;
-      width: 120px; height: 120px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,212,255,0.08) 0%, transparent 70%);
-      pointer-events: none;
-      transform: translate(-50%,-50%);
-      transition: all .6s ease;
     }
 
     #stars-canvas {
@@ -166,6 +128,19 @@ const GlobalStyle = () => (
       content:''; display:block; width:60px; height:2px; margin:16px auto 0;
       background:linear-gradient(90deg,var(--pink),var(--blue));
       border-radius:2px;
+    }
+
+    .about-section {
+      position:relative; z-index:10;
+      max-width:720px;
+      margin:40px auto 10px;
+      padding:0 24px 40px;
+      text-align:left;
+    }
+    .about-section p {
+      font-size:.8rem;
+      line-height:1.8;
+      color:var(--text-dim);
     }
 
     .products-section { position:relative; z-index:10; padding:0 24px 80px; }
@@ -325,18 +300,20 @@ const GlobalStyle = () => (
     }
 
     .contact-section {
-      position:fixed; left:0; right:0; bottom:0; z-index:100;
-      padding:16px 24px;
-      background:rgba(8, 4, 24, 0.88);
-      border-top:1px solid rgba(0,212,255,0.25);
-      backdrop-filter:blur(20px);
-      box-shadow: 0 -8px 32px rgba(0,0,0,0.4);
-      font-family:'Space Mono',monospace;
+      position:relative; z-index:10;
+      max-width:960px;
+      margin:40px auto 80px;
+      padding:24px 28px;
+      background:var(--card);
+      border-radius:18px;
+      border:1px solid var(--border-blue);
+      box-shadow:0 16px 40px rgba(0,0,0,0.6);
       display:flex;
       flex-wrap:wrap;
       align-items:center;
-      justify-content:center;
-      gap:24px 32px;
+      justify-content:space-between;
+      gap:16px 32px;
+      font-family:'Space Mono',monospace;
     }
     .contact-section h3 {
       font-family:'Syne',sans-serif; font-size:.68rem; font-weight:700;
@@ -372,7 +349,12 @@ const GlobalStyle = () => (
       .products-grid { grid-template-columns:1fr; }
       .alien-peek { display:none; }
       .site-nav { gap:20px; flex-wrap:wrap; }
-      .contact-section { padding:12px 16px; gap:16px 24px; }
+      .contact-section {
+        margin:32px 16px 72px;
+        padding:16px 18px;
+        flex-direction:column;
+        align-items:flex-start;
+      }
     }
   `}</style>
 );
@@ -576,64 +558,6 @@ function ProductCard({ product, delay, mousePos }) {
   );
 }
 
-function Cursor() {
-  const dotRef = useRef(null);
-  const ringRef = useRef(null);
-  const glowRef = useRef(null);
-  const pos = useRef({ x: 0, y: 0 });
-  const ring = useRef({ x: 0, y: 0 });
-  const glow = useRef({ x: 0, y: 0 });
-  const raf = useRef(null);
-  const hovering = useRef(false);
-
-  useEffect(() => {
-    const onMove = (e) => {
-      pos.current = { x: e.clientX, y: e.clientY };
-      if (dotRef.current) {
-        dotRef.current.style.left = e.clientX + "px";
-        dotRef.current.style.top = e.clientY + "px";
-      }
-      const el = document.elementFromPoint(e.clientX, e.clientY);
-      const isHover = el && (el.matches("a,button,.btn-buy,.nav-link") || el.closest("a,button,.btn-buy,.nav-link"));
-      if (isHover !== hovering.current) {
-        hovering.current = isHover;
-        ringRef.current?.classList.toggle("hovering", isHover);
-      }
-    };
-
-    const loop = () => {
-      ring.current.x += (pos.current.x - ring.current.x) * 0.14;
-      ring.current.y += (pos.current.y - ring.current.y) * 0.14;
-      if (ringRef.current) {
-        ringRef.current.style.left = ring.current.x + "px";
-        ringRef.current.style.top = ring.current.y + "px";
-      }
-      glow.current.x += (pos.current.x - glow.current.x) * 0.06;
-      glow.current.y += (pos.current.y - glow.current.y) * 0.06;
-      if (glowRef.current) {
-        glowRef.current.style.left = glow.current.x + "px";
-        glowRef.current.style.top = glow.current.y + "px";
-      }
-      raf.current = requestAnimationFrame(loop);
-    };
-
-    window.addEventListener("mousemove", onMove);
-    raf.current = requestAnimationFrame(loop);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf.current);
-    };
-  }, []);
-
-  return (
-    <>
-      <div ref={dotRef} className="cur-dot" />
-      <div ref={ringRef} className="cur-ring" />
-      <div ref={glowRef} className="cur-glow" />
-    </>
-  );
-}
-
 function Starfield() {
   const canvasRef = useRef(null);
 
@@ -754,7 +678,6 @@ export default function App() {
   return (
     <>
       <GlobalStyle />
-      <Cursor />
       <Starfield />
 
       <div className="neb neb1" />
@@ -777,6 +700,14 @@ export default function App() {
         ))}
       </nav>
 
+      <section id="about" className="about-section">
+        <p className="reveal">
+          CosmicDeals is your tiny portal for handpicked products that feel just a little bit
+          otherworldly. Every item on this page is curated for everyday use, with a clean,
+          distraction-free layout so you can browse fast on mobile or desktop without any lag.
+        </p>
+      </section>
+
       <section id="products" className="products-section">
         <div className="sec-head reveal">
           <span className="sec-eyebrow">✦ Handpicked from the cosmos</span>
@@ -790,6 +721,8 @@ export default function App() {
         </div>
       </section>
 
+      <ContactSection />
+
       <footer className="site-footer">
         <span className="footer-logo">✦ CosmicDeals</span>
         <p className="footer-note">
@@ -797,8 +730,6 @@ export default function App() {
           ALL PRICES ARE APPROXIMATE AND SUBJECT TO CHANGE
         </p>
       </footer>
-
-      <ContactSection />
     </>
   );
 }
