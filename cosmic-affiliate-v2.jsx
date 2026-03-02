@@ -6,7 +6,12 @@ const GlobalStyle = () => (
     @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
 
     :root {
       --pink: #ff2d9b;
@@ -26,6 +31,8 @@ const GlobalStyle = () => (
       font-family: 'Space Mono', monospace;
       color: #fff;
       overflow-x: hidden;
+      width: 100%;
+      max-width: 100vw;
       min-height: 100vh;
     }
 
@@ -44,11 +51,7 @@ const GlobalStyle = () => (
     @keyframes drift2 { to { transform: translate(-60px, -40px) scale(1.1); } }
     @keyframes drift3 { to { transform: translate(-80px, 70px) scale(0.9); } }
 
-    body::after {
-      content:''; position:fixed; inset:0; z-index:1; pointer-events:none;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.028;
-    }
+    /* subtle noise layer removed to keep images crisp */
 
     .site-header {
       position:relative; z-index:10;
@@ -143,7 +146,10 @@ const GlobalStyle = () => (
       color:var(--text-dim);
     }
 
-    .products-section { position:relative; z-index:10; padding:0 24px 80px; }
+    .products-section {
+      position:relative; z-index:10;
+      padding:0 16px 80px;
+    }
     .products-grid {
       display:grid;
       grid-template-columns: repeat(auto-fill, minmax(310px,1fr));
@@ -198,9 +204,12 @@ const GlobalStyle = () => (
     .card-img {
       width:100%; height:210px; overflow:hidden;
       border-radius:20px 20px 0 0; position:relative; z-index:1;
+      background:#050214;
     }
     .card-img img {
       width:100%; height:100%; object-fit:cover;
+      display:block;
+      image-rendering:auto;
       transition:transform .6s cubic-bezier(0.25,0.46,0.45,0.94);
     }
     .p-card:hover .card-img img { transform:scale(1.1); }
@@ -291,13 +300,7 @@ const GlobalStyle = () => (
     }
     .footer-note { font-size:.65rem; color:rgba(255,255,255,.2); letter-spacing:.15em; line-height:2; }
 
-    .scanline {
-      position:fixed; inset:0; z-index:2; pointer-events:none;
-      background: repeating-linear-gradient(
-        0deg, transparent, transparent 2px,
-        rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px
-      );
-    }
+    /* scanline effect removed for cleaner images */
 
     .contact-section {
       position:relative; z-index:10;
@@ -346,15 +349,32 @@ const GlobalStyle = () => (
     }
 
     @media (max-width:640px) {
+      .site-header {
+        padding: 56px 16px 28px;
+      }
+      .logo-text {
+        font-size: clamp(2.2rem, 9vw, 3rem);
+        line-height: 1.05;
+      }
       .products-grid { grid-template-columns:1fr; }
       .alien-peek { display:none; }
-      .site-nav { gap:20px; flex-wrap:wrap; }
+      .site-nav {
+        gap:16px;
+        flex-wrap:wrap;
+        padding-inline:16px;
+      }
+      .products-section {
+        padding:0 12px 64px;
+      }
       .contact-section {
         margin:32px 16px 72px;
         padding:16px 18px;
         flex-direction:column;
         align-items:flex-start;
       }
+      #stars-canvas { display:none; }
+      .neb { display:none; }
+      .scanline { display:none; }
     }
   `}</style>
 );
@@ -438,7 +458,7 @@ const PRODUCTS = [
     reviews: 2776,
     alien: "🤖",
     eye: "🌟",
-    img: "/vaseline-lip-cocoa.png",
+    img: "/Screenshot 2026-03-02 225259.png",
     link: "https://amzn.to/3NbT8Bh",
   },
   {
@@ -563,6 +583,16 @@ function Starfield() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const prefersReduced = window.matchMedia
+      ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      : false;
+    const isSmallScreen = window.innerWidth <= 640;
+    if (prefersReduced || isSmallScreen) {
+      return;
+    }
+
     const ctx = canvas.getContext("2d");
     let animId;
     let stars = [];
@@ -683,8 +713,6 @@ export default function App() {
       <div className="neb neb1" />
       <div className="neb neb2" />
       <div className="neb neb3" />
-
-      <div className="scanline" />
 
       <header className="site-header">
         <div className="logo-wrap reveal">
