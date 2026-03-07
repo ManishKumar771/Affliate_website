@@ -58,6 +58,117 @@ const GlobalStyle = () => (
       text-align:center;
       padding: 80px 24px 40px;
     }
+    .menu-toggle {
+      position:fixed;
+      top:18px;
+      right:18px;
+      width:40px;
+      height:40px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(2,0,10,0.85);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      z-index:40;
+      box-shadow:0 8px 26px rgba(0,0,0,0.55);
+      backdrop-filter:blur(14px);
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .menu-toggle:hover {
+      transform:translateY(-1px) scale(1.02);
+      box-shadow:0 10px 30px rgba(0,0,0,0.7);
+      border-color:var(--border-blue);
+      background:rgba(4,0,18,0.92);
+    }
+    .menu-toggle-lines {
+      display:inline-flex;
+      flex-direction:column;
+      gap:4px;
+      width:18px;
+    }
+    .menu-toggle-line {
+      height:2px;
+      width:100%;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--pink),var(--blue));
+      transition:transform .2s ease, opacity .2s ease;
+    }
+    .menu-toggle.is-open .menu-toggle-line:nth-child(1) {
+      transform:translateY(6px) rotate(40deg);
+    }
+    .menu-toggle.is-open .menu-toggle-line:nth-child(2) {
+      opacity:0;
+    }
+    .menu-toggle.is-open .menu-toggle-line:nth-child(3) {
+      transform:translateY(-6px) rotate(-40deg);
+    }
+    .menu-panel {
+      position:fixed;
+      top:68px;
+      right:18px;
+      width:220px;
+      border-radius:18px;
+      padding:10px 10px 12px;
+      background:rgba(5,1,20,0.96);
+      border:1px solid rgba(255,255,255,0.12);
+      box-shadow:
+        0 22px 55px rgba(0,0,0,0.85),
+        0 0 22px rgba(0,212,255,0.28),
+        0 0 34px rgba(255,45,155,0.22);
+      backdrop-filter:blur(18px);
+      z-index:35;
+      opacity:0;
+      transform:translateY(-6px);
+      pointer-events:none;
+      transition:opacity .22s ease, transform .22s ease;
+    }
+    .menu-panel.open {
+      opacity:1;
+      transform:translateY(0);
+      pointer-events:auto;
+    }
+    .menu-panel-title {
+      font-family:'Syne',sans-serif;
+      font-size:.62rem;
+      letter-spacing:.32em;
+      text-transform:uppercase;
+      color:var(--text-dim);
+      margin-bottom:6px;
+      padding-inline:4px;
+    }
+    .menu-item {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      width:100%;
+      padding:8px 9px;
+      border-radius:12px;
+      border:1px solid transparent;
+      background:transparent;
+      color:rgba(255,255,255,0.86);
+      text-decoration:none;
+      font-size:.72rem;
+      font-family:'Space Mono',monospace;
+      cursor:pointer;
+      transition:background .18s ease, border-color .18s ease, transform .16s ease, color .16s ease;
+    }
+    .menu-item span {
+      font-size:.86rem;
+    }
+    .menu-item-label {
+      letter-spacing:.04em;
+    }
+    .menu-item:hover {
+      background:rgba(14,5,42,0.95);
+      border-color:var(--border-pink);
+      transform:translateY(-1px);
+      color:#fff;
+    }
+    .menu-item + .menu-item {
+      margin-top:4px;
+    }
     .logo-wrap { display:inline-block; position:relative; }
     .logo-text {
       font-family:'Syne',sans-serif;
@@ -114,7 +225,7 @@ const GlobalStyle = () => (
 
     .sec-head {
       text-align:center; position:relative; z-index:10;
-      margin-bottom:48px; padding-top:70px;
+      margin-bottom:32px; padding-top:70px;
     }
     .sec-eyebrow {
       font-size:.6rem; letter-spacing:.5em; text-transform:uppercase;
@@ -132,6 +243,38 @@ const GlobalStyle = () => (
       background:linear-gradient(90deg,var(--pink),var(--blue));
       border-radius:2px;
     }
+    .product-tabs {
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+    .product-tab {
+      padding:7px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.16);
+      background:rgba(6,3,20,0.85);
+      color:rgba(255,255,255,0.7);
+      font-family:'Syne',sans-serif;
+      font-size:.7rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      cursor:pointer;
+      transition:background .18s ease, border-color .18s ease, transform .12s ease, color .18s ease, box-shadow .18s ease;
+    }
+    .product-tab:hover {
+      transform:translateY(-1px);
+      border-color:var(--border-blue);
+      color:#fff;
+      box-shadow:0 8px 20px rgba(0,0,0,0.6);
+    }
+    .product-tab.is-active {
+      background:linear-gradient(135deg,var(--pink),var(--blue));
+      border-color:transparent;
+      color:#02000a;
+      box-shadow:0 10px 28px rgba(0,0,0,0.75);
+    }
 
     .about-section {
       position:relative; z-index:10;
@@ -144,6 +287,112 @@ const GlobalStyle = () => (
       font-size:.8rem;
       line-height:1.8;
       color:var(--text-dim);
+    }
+
+    .lookmax-page {
+      position:relative;
+      z-index:10;
+      max-width:860px;
+      margin:0 auto 56px;
+      padding:0 24px 40px;
+      font-size:.78rem;
+      line-height:1.9;
+      color:var(--text-dim);
+      animation:lookmaxFadeUp .55s ease-out;
+    }
+    .lookmax-intro {
+      margin-bottom:18px;
+    }
+    .lookmax-intro strong {
+      font-family:'Syne',sans-serif;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:.7rem;
+      display:block;
+      margin-bottom:6px;
+      color:var(--blue);
+    }
+    .lookmax-points {
+      margin-top:8px;
+    }
+    .lookmax-points b {
+      color:#fff;
+      font-family:'Syne',sans-serif;
+      font-size:.78rem;
+    }
+    .lookmax-download-btn {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      margin-top:22px;
+      padding:10px 18px;
+      border-radius:999px;
+      border:1px solid rgba(255,45,155,0.6);
+      background:radial-gradient(circle at 0 0, rgba(255,45,155,0.25), transparent 55%),
+                 radial-gradient(circle at 100% 100%, rgba(0,212,255,0.25), transparent 55%),
+                 rgba(8,3,26,0.96);
+      color:#fff;
+      font-family:'Syne',sans-serif;
+      font-size:.72rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      text-decoration:none;
+      cursor:pointer;
+      box-shadow:0 10px 32px rgba(0,0,0,0.7);
+      transition:transform .18s ease, box-shadow .2s ease, background .22s ease;
+    }
+    .lookmax-download-btn:hover {
+      transform:translateY(-1px);
+      box-shadow:0 16px 40px rgba(0,0,0,0.85);
+      background:radial-gradient(circle at 0 0, rgba(255,45,155,0.32), transparent 60%),
+                 radial-gradient(circle at 100% 100%, rgba(0,212,255,0.32), transparent 60%),
+                 rgba(10,4,32,1);
+    }
+    .lookmax-download-btn span:first-child {
+      font-size:.9rem;
+    }
+    .back-chip {
+      position:fixed;
+      top:18px;
+      right:18px;
+      z-index:40;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,0.18);
+      background:rgba(4,0,18,0.9);
+      color:rgba(255,255,255,0.8);
+      font-size:.7rem;
+      font-family:'Syne',sans-serif;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      cursor:pointer;
+      backdrop-filter:blur(14px);
+      box-shadow:0 8px 26px rgba(0,0,0,0.6);
+      text-decoration:none;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease, color .18s ease;
+    }
+    .back-chip:hover {
+      transform:translateY(-1px);
+      border-color:var(--border-blue);
+      background:rgba(8,2,30,0.95);
+      color:#fff;
+      box-shadow:0 12px 32px rgba(0,0,0,0.8);
+    }
+    .back-chip-icon {
+      font-size:.9rem;
+    }
+    @keyframes lookmaxFadeUp {
+      from {
+        opacity:0;
+        transform:translateY(22px) scale(0.98);
+      }
+      to {
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
     }
 
     .products-section {
@@ -479,6 +728,302 @@ const PRODUCTS = [
   },
 ];
 
+const SPECIAL_LOOKMAX_PRODUCTS = [
+  {
+    id: 101,
+    category: "Face / Glow",
+    title: "Vitamin C Skin Brightening Serum",
+    desc: "Boosts glow, helps fade tan marks and uneven tone when used with SPF.",
+    price: "Check Price",
+    was: "",
+    save: "Lookmax Pick",
+    badge: "🧬 Face Upgrade",
+    rating: 4.6,
+    reviews: 2100,
+    alien: "🧠",
+    eye: "✨",
+    img: "/minimalist-spf50.png",
+    link: "https://amzn.to/4rMUVvM",
+  },
+  {
+    id: 102,
+    category: "Jawline / Gum",
+    title: "Hard Chewing Mastic Gum Pack",
+    desc: "High‑resistance gum to train jaw muscles and support sharper jawline goals.",
+    price: "Check Price",
+    was: "",
+    save: "Lookmax Tool",
+    badge: "💪 Jaw Work",
+    rating: 4.4,
+    reviews: 980,
+    alien: "😼",
+    eye: "🧬",
+    img: "/chewing-gum.png",
+    link: "https://amzn.to/4sg24V3",
+  },
+  {
+    id: 103,
+    category: "Skin / Night Care",
+    title: "Aloe Recovery Gel for Overnight Repair",
+    desc: "Lightweight aloe‑based gel that calms skin and supports overnight recovery.",
+    price: "Check Price",
+    was: "",
+    save: "Night Routine",
+    badge: "🌙 Reset",
+    rating: 4.5,
+    reviews: 1320,
+    alien: "👁️",
+    eye: "🧊",
+    img: "/man-matters-hair-serum.png",
+    link: "https://amzn.to/3ZZfNnj",
+  },
+];
+
+const HAIR_MAX_PRODUCTS = [
+  {
+    id: 201,
+    category: "Hair / Serum",
+    title:
+      "Streax Professional Vitariche Gloss Hair Serum,75 ml| Frizz-Free Hair | Enhance Shine and Smoothness | With Vitamin E & Macadamia Oil| | For All Hair Types",
+    desc: "Experience The Magic Of Sleek Hair: Unleash the power of this extraordinary serum for hair that is expertly crafted to enhance shine and smoothness, making your hair a true showstopper. No need to wait for your next salon visit – flaunt salon-worthy hair every single day.",
+    price: "Check Price",
+    was: "",
+    save: "Shine Serum",
+    badge: "💧 Gloss",
+    rating: 4.5,
+    reviews: 1750,
+    alien: "🦾",
+    eye: "💧",
+    img: "/streax-vitariche-gloss-serum.png",
+    link: "https://amzn.to/3PlTcyU",
+  },
+  {
+    id: 202,
+    category: "Hair / Volume & Texture",
+    title:
+      "Dasher Sea Salt Spray (100 ML) Hair Volume, Texture, Smooth Hair With Bhringraj, Vitamin E - Hair Styling, Pack of 1",
+    desc: "HAIR HEALTH INGREDIENTS – Authentic sea salt thickens hair and provides extra grip, while the nourishing blend of bhringraj, meadowfoam, vitamin E, and keratin protein works its magic throughout the day. 100% water-based and free from sulphates, parabens, and alcohol.",
+    price: "Check Price",
+    was: "",
+    save: "Beach Texture",
+    badge: "🌊 Sea Salt",
+    rating: 4.4,
+    reviews: 1190,
+    alien: "🧔",
+    eye: "🔥",
+    img: "/dasher-sea-salt-spray.png",
+    link: "https://amzn.to/4rd3Ipy",
+  },
+  {
+    id: 203,
+    category: "Hair / Styling Clay",
+    title:
+      "GATSBY Japan's No. 1 Fiber Clay 80g | Matte Finish | Enriched with Pro-Vitamin B5 and Keratin",
+    desc: "Lightweight, non-sticky fiber clay that delivers extreme hold and flexible styling, from neat to messy looks, with a natural matte finish.",
+    price: "Check Price",
+    was: "",
+    save: "Matte Hold",
+    badge: "🧱 Clay",
+    rating: 4.5,
+    reviews: 1430,
+    alien: "👽",
+    eye: "⚡",
+    img: "/gatsby-fiber-clay.png",
+    link: "https://amzn.to/40eG1SQ",
+  },
+  {
+    id: 204,
+    category: "Hair / Repair Mask",
+    title:
+      "HAIR LOGIC Reparative Hair Mask for Damaged, Dry & Chemically Treated Hair – Deep Nourishment, Frizz Control & Shine – Suitable for Men & Women, 200 gm (White)",
+    desc: "Shine and Luster: Adds shine and luster to dull hair, giving it a vibrant, healthy appearance while helping to control frizz and dryness.",
+    price: "Check Price",
+    was: "",
+    save: "Repair Mask",
+    badge: "🧴 Repair",
+    rating: 4.4,
+    reviews: 820,
+    alien: "🪄",
+    eye: "✨",
+    img: "/hairlogic-reparative-mask.png",
+    link: "https://amzn.to/3OSA37N",
+  },
+  {
+    id: 205,
+    category: "Hair / Concealer",
+    title:
+      "THICK FIBER Hair Building Fibers (Black) 12g - Hair Fibres For Thin & Bald Spots - Thickening Fibers For Men & Women",
+    desc: "Hair powder for thinning hair for women and men is resistant to sweat too, allowing you to have your hair full and naturally thick even on the most active days.",
+    price: "Check Price",
+    was: "",
+    save: "Instant Coverage",
+    badge: "🧴 Fibers",
+    rating: 4.4,
+    reviews: 960,
+    alien: "🛰️",
+    eye: "👀",
+    img: "/thick-fiber-hair-building-fibers.png",
+    link: "https://amzn.to/40f4UxO",
+  },
+  {
+    id: 206,
+    category: "Hair / Growth Spray",
+    title:
+      "Pilgrim Spanish Rosemary Water Spray With Biotin for Hair Growth 100ml | Hair Spray for Regrowth | Thicker & Stronger Hair | Sulphate & Paraben Free I For Women for Men",
+    desc: "Healthier Hair Growth: Infused with Biotin and Rosemary, the spray strengthens hair from root to tip, enhancing resilience and reducing breakage.",
+    price: "Check Price",
+    was: "",
+    save: "Growth Spray",
+    badge: "🌿 Rosemary",
+    rating: 4.5,
+    reviews: 1120,
+    alien: "🧑‍🚀",
+    eye: "💧",
+    img: "/pilgrim-spanish-rosemary-spray.png",
+    link: "https://amzn.to/4lgywEL",
+  },
+];
+
+const BODY_IMPROVEMENT_PRODUCTS = [
+  {
+    id: 301,
+    category: "For body to muscle gain",
+    title:
+      "MuscleBlaze Beginner's Protein (Chocolate, 1 kg / 2.2 lb) with Shaker Combo | Whey Supplement Powder",
+    desc: "40% PROTEIN: Get 40% of protein i.e. 12 g protein per 30g serving with 5.64g EAAs and 2.65g BCAAs to help keep the body in an anabolic state to improve muscle gains and reduce muscle loss. Whey Protein Concentrate is the primary source of protein in this whey protein supplement.",
+    price: "Check Price",
+    was: "",
+    save: "Gym Starter",
+    badge: "💪 MuscleBoost",
+    rating: 4.6,
+    reviews: 2210,
+    alien: "🛰️",
+    eye: "✨",
+    img: "/muscleblaze-beginners-protein.png.png",
+    link: "https://amzn.to/40es8UI",
+  },
+  {
+    id: 302,
+    category: "Bone / Joint Health",
+    title:
+      "hk vitals Calcium Magnesium & Zinc (60 Tablets) | With Vitamin D3, Calcium Supplement for Women and Men | For Bone Health & Joint Support",
+    desc: "BOOSTS ENERGY AND IMMUNITY: These calcium tablets for women & men also have magnesium and zinc that help in developing & functioning of immune cells. Hence, helping boost energy and immunity.",
+    price: "Check Price",
+    was: "",
+    save: "Bone Support",
+    badge: "🩻 Bones",
+    rating: 4.5,
+    reviews: 1980,
+    alien: "🤖",
+    eye: "💫",
+    img: "/hk-vitals-cal-mag-zinc.png",
+    link: "https://amzn.to/4d3YybV",
+  },
+  {
+    id: 303,
+    category: "Omega 3 / Heart",
+    title:
+      "Neuherbs Deep Sea Cod Liver Oil Omega 3 Supplement With Vitamin A, D3 & E | Supports Heart, Brain, Bone & Skin Health | Fish Oil for Men & Women | No Fishy Burps With Lemon Flavour - 100 Softgels",
+    desc: "Supports Heart Health: Deep-Sea Cod Liver Oil offers goodness of omega-3 fatty acids with Vitamin E & A which help maintain healthy cholesterol & blood pressure levels and protect heart health.",
+    price: "Check Price",
+    was: "",
+    save: "Heart Support",
+    badge: "💧 Omega 3",
+    rating: 4.4,
+    reviews: 860,
+    alien: "😴",
+    eye: "🌙",
+    img: "/neuherbs-deep-sea-cod-liver-oil.png",
+    link: "https://amzn.to/4rUjXcc",
+  },
+  {
+    id: 304,
+    category: "Gut / Digestive Health",
+    title:
+      "WELLBEING NUTRITION Daily Fiber Powder|Weight Management, Manages Sugar Control, Bloating, Constipation & Acidity Relief|Organic Prebiotic Digestive Fiber Supplement|Pina Colada|30 Servings, 1 count",
+    desc: "NOURISHING THE BODY’S SECOND BRAIN: With 80% of serotonin produced in the gut, your digestive system is deeply connected to mood, appetite, and cognitive function. This clinically proven formula helps balance gut bacteria, promote satiety, and curb cravings, allowing for better emotional stability, improved metabolism, and long-term digestive health. Feel fuller for longer.",
+    price: "Check Price",
+    was: "",
+    save: "Digestive Care",
+    badge: "🥥 Fiber",
+    rating: 4.5,
+    reviews: 1240,
+    alien: "🧬",
+    eye: "🍍",
+    img: "/wellbeing-daily-fiber.png",
+    link: "https://amzn.to/40fkWaR",
+  },
+  {
+    id: 305,
+    category: "Body / Exfoliation",
+    title:
+      "Chemist At Play Exfoliating Body Wash 236ml | Removes Tan, Fights Body Acne, Strawberry Skin | 4% (Salicylic Acid, Vitamin E & Lactic Acid) | Gentle Exfoliating Shower Gel For Women & Men",
+    desc: "IMPROVES THE SKIN'S TEXTURE: This body wash is enriched with Lactic Acid which gently exfoliates dead skin cells, improving overall appearance. It evens out skin tone and helps fade age spots while keeping the skin hydrated.",
+    price: "Check Price",
+    was: "",
+    save: "Smooth Skin",
+    badge: "🧴 Glow Wash",
+    rating: 4.4,
+    reviews: 1650,
+    alien: "🪐",
+    eye: "✨",
+    img: "/chemist-at-play-body-wash.png",
+    link: "https://amzn.to/47tbd4B",
+  },
+  {
+    id: 306,
+    category: "Growth / Bone Support",
+    title:
+      "Height Boost – 60 Tablets | Supports Bone Health with Essential Vitamins, Minerals, and Micronutrients for Overall Wellness",
+    desc: "SUPPORTS BONE & JOINT HEALTH – Enriched with calcium, vitamin D, and other key nutrients that help maintain strong bones, support joint flexibility, and contribute to an active lifestyle.",
+    price: "Check Price",
+    was: "",
+    save: "Growth Support",
+    badge: "📈 Height",
+    rating: 4.3,
+    reviews: 910,
+    alien: "🧑‍🚀",
+    eye: "⭐",
+    img: "/nutrazen-height-boost.png",
+    link: "https://amzn.to/4uiX7gi",
+  },
+];
+
+const PRODUCT_SECTIONS = {
+  featured: {
+    key: "featured",
+    eyebrow: "✦ Handpicked from the cosmos",
+    title: "Featured",
+    titleEm: "Deals",
+    tabLabel: "Featured deals",
+    products: PRODUCTS,
+  },
+  specialLookmax: {
+    key: "specialLookmax",
+    eyebrow: "✦ Glow & Groom",
+    title: "Special",
+    titleEm: "Lookmax",
+    tabLabel: "Special lookmax",
+    products: SPECIAL_LOOKMAX_PRODUCTS,
+  },
+  hairMax: {
+    key: "hairMax",
+    eyebrow: "✦ Hair On Point",
+    title: "Hair",
+    titleEm: "Max",
+    tabLabel: "Hair max",
+    products: HAIR_MAX_PRODUCTS,
+  },
+  bodyImprovement: {
+    key: "bodyImprovement",
+    eyebrow: "✦ Head To Toe",
+    title: "Body",
+    titleEm: "Improvement",
+    tabLabel: "Body improvement",
+    products: BODY_IMPROVEMENT_PRODUCTS,
+  },
+};
+
 // Track cursor for proximity-based alien peek
 function useMousePosition() {
   const [pos, setPos] = useState({ x: 0, y: 0 });
@@ -537,8 +1082,7 @@ function ProductCard({ product, delay, mousePos }) {
   return (
     <div
       ref={cardRef}
-      className="p-card reveal"
-      style={{ transitionDelay: `${delay}ms` }}
+      className="p-card"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
@@ -701,9 +1245,14 @@ function ContactSection() {
   );
 }
 
-export default function App() {
+function HomeApp() {
   useScrollReveal();
   const mousePos = useMousePosition();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("featured");
+
+  const toggleMenu = () => setMenuOpen((v) => !v);
+  const closeMenu = () => setMenuOpen(false);
 
   return (
     <>
@@ -713,6 +1262,34 @@ export default function App() {
       <div className="neb neb1" />
       <div className="neb neb2" />
       <div className="neb neb3" />
+
+      <button
+        type="button"
+        className={`menu-toggle ${menuOpen ? "is-open" : ""}`}
+        aria-label={menuOpen ? "Close menu" : "Open menu"}
+        onClick={toggleMenu}
+      >
+        <span className="menu-toggle-lines">
+          <span className="menu-toggle-line" />
+          <span className="menu-toggle-line" />
+          <span className="menu-toggle-line" />
+        </span>
+      </button>
+
+      <div className={`menu-panel ${menuOpen ? "open" : ""}`}>
+        <div className="menu-panel-title">Quick Sections</div>
+        <button
+          type="button"
+          className="menu-item"
+          onClick={() => {
+            closeMenu();
+            window.location.href = "/lookmaxing-guide";
+          }}
+        >
+          <span>🧬</span>
+          <span className="menu-item-label">Lookmaxing guide</span>
+        </button>
+      </div>
 
       <header className="site-header">
         <div className="logo-wrap reveal">
@@ -724,7 +1301,9 @@ export default function App() {
 
       <nav className="site-nav">
         {["Products", "About", "Contact"].map((n) => (
-          <a key={n} href={"/#" + n.toLowerCase()} className="nav-link">{n}</a>
+          <a key={n} href={"/#" + n.toLowerCase()} className="nav-link">
+            {n}
+          </a>
         ))}
       </nav>
 
@@ -737,16 +1316,41 @@ export default function App() {
       </section>
 
       <section id="products" className="products-section">
-        <div className="sec-head reveal">
-          <span className="sec-eyebrow">✦ Handpicked from the cosmos</span>
-          <h2 className="sec-title">Featured <em>Deals</em></h2>
-        </div>
+        {(() => {
+          const cfg = PRODUCT_SECTIONS[activeSection] || PRODUCT_SECTIONS.featured;
+          const products =
+            Array.isArray(cfg.products) && cfg.products.length > 0
+              ? cfg.products
+              : PRODUCTS;
+          return (
+            <>
+              <div className="sec-head reveal">
+                <span className="sec-eyebrow">{cfg.eyebrow}</span>
+                <h2 className="sec-title">
+                  {cfg.title} <em>{cfg.titleEm}</em>
+                </h2>
+                <div className="product-tabs">
+                  {Object.values(PRODUCT_SECTIONS).map((s) => (
+                    <button
+                      key={s.key}
+                      type="button"
+                      className={`product-tab ${activeSection === s.key ? "is-active" : ""}`}
+                      onClick={() => setActiveSection(s.key)}
+                    >
+                      {s.tabLabel}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-        <div className="products-grid">
-          {PRODUCTS.map((p, i) => (
-            <ProductCard key={p.id} product={p} delay={i * 80} mousePos={mousePos} />
-          ))}
-        </div>
+              <div className="products-grid">
+                {products.map((p, i) => (
+                  <ProductCard key={p.id} product={p} delay={i * 80} mousePos={mousePos} />
+                ))}
+              </div>
+            </>
+          );
+        })()}
       </section>
 
       <ContactSection />
@@ -760,4 +1364,112 @@ export default function App() {
       </footer>
     </>
   );
+}
+
+function LookmaxGuidePage() {
+  return (
+    <>
+      <GlobalStyle />
+      <Starfield />
+
+      <div className="neb neb1" />
+      <div className="neb neb2" />
+      <div className="neb neb3" />
+
+      <button
+        type="button"
+        className="back-chip"
+        onClick={() => {
+          window.location.href = "/";
+        }}
+      >
+        <span className="back-chip-icon">←</span>
+        <span>Back</span>
+      </button>
+
+      <header className="site-header">
+        <div className="logo-wrap">
+          <h1 className="logo-text">Easy Lookmaxing Guide</h1>
+          <span className="logo-sub">From the CosmicDeals collection</span>
+          <span className="logo-line" />
+        </div>
+      </header>
+
+      <section className="lookmax-page" id="lookmaxing-guide">
+        <div className="lookmax-intro">
+          <strong>Quick overview 🧬</strong>
+          <p>
+            This page is a simplified version of the Easy Lookmaxing Guide. It pulls the most
+            useful habits and routines from the PDF so you can skim and start using them fast.
+          </p>
+        </div>
+
+        <div className="lookmax-intro">
+          <strong>What this guide covers</strong>
+          <p className="lookmax-points">
+            <b>1. Clear skin & de-tanning</b> – basic skincare, de-tan ideas, and easy changes.
+            <br />
+            <b>2. Better looking hair</b> – washing, oiling, and styling that fits daily life.
+            <br />
+            <b>3. Jawline & face structure</b> – mewing, chewing, and posture habits.
+            <br />
+            <b>4. Eyes, nose & features</b> – simple changes that make your face look fresher.
+            <br />
+            <b>5. Tools & weekly habits</b> – Gua Sha, rollers, grooming and a small checklist.
+          </p>
+        </div>
+
+        <div className="lookmax-intro">
+          <strong>Daily checklist idea</strong>
+          <p>
+            - Mewing (tongue on roof, lips closed, nose breathing)
+            <br />
+            - Sunscreen and basic skincare
+            <br />
+            - Enough water through the day
+            <br />
+            - Nose breathing and better posture
+          </p>
+        </div>
+
+        <div className="lookmax-intro">
+          <strong>Weekly checklist idea</strong>
+          <p>
+            - Hair oiling 1–2 times
+            <br />
+            - Gua Sha around 3 sessions
+            <br />
+            - One face pack
+            <br />
+            - Groom beard and nails
+          </p>
+        </div>
+
+        <a
+          href="/865549309-Easy-Lookmaxing-Guide.pdf"
+          download="Easy-Lookmaxing-Guide.pdf"
+          className="lookmax-download-btn"
+        >
+          <span>📥</span>
+          <span>Download full PDF guide</span>
+        </a>
+      </section>
+
+      <footer className="site-footer">
+        <span className="footer-logo">✦ CosmicDeals</span>
+        <p className="footer-note">
+          AFFILIATE DISCLOSURE — WE MAY EARN A COMMISSION ON PURCHASES<br />
+          ALL PRICES ARE APPROXIMATE AND SUBJECT TO CHANGE
+        </p>
+      </footer>
+    </>
+  );
+}
+
+export default function App() {
+  const path = typeof window !== "undefined" ? window.location.pathname : "/";
+  if (path.startsWith("/lookmaxing-guide")) {
+    return <LookmaxGuidePage />;
+  }
+  return <HomeApp />;
 }
